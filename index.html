@@ -654,7 +654,6 @@ async function fetchFromSheet(){
     console.log('Garden Board: HTTP status →', res.status);
     const data = await res.json();
     console.log('Garden Board: Response →', JSON.stringify(data));
-    const data = await res.json();
 
     if(!data.ok) throw new Error(data.error || 'API error');
 
