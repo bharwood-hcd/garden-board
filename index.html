@@ -611,7 +611,7 @@ function updateRevenue(raw){
 // ── GOOGLE SHEETS CONNECTION ──────────────────────────────
 // After Step 4 of the setup guide, replace the placeholder below
 // with your actual Apps Script URL.
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbw_1iv4f47YTKWQt5QsUjZw5Z8drguETDhtbImnzxqAlswiBWgXNPxbfcpiQqZn6c8t1w/exec';
+const SHEET_API_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
 
 const PLOT_COLORS = [
   {bg:'#4A6741',fg:'#E8D5A3'},{bg:'#7A4F2D',fg:'#F5EDD8'},
@@ -638,9 +638,12 @@ let lastFetched = null;
 async function fetchFromSheet(){
   if(SHEET_API_URL === 'YOUR_APPS_SCRIPT_URL_HERE') return;
 
+  const selectedDate = document.getElementById('datePicker').value
+    || new Date().toISOString().split('T')[0];
+
   setLoadingState(true);
   try {
-    const res  = await fetch(SHEET_API_URL);
+    const res  = await fetch(SHEET_API_URL + '?date=' + selectedDate);
     const data = await res.json();
 
     if(!data.ok) throw new Error(data.error || 'API error');
@@ -902,6 +905,7 @@ function updateDate(){
   const d=new Date(dp+'T00:00:00');
   const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   document.getElementById('dayLabel').textContent=days[d.getDay()];
+  fetchFromSheet();
 }
 
 function openAddMember(){ document.getElementById('addModal').classList.add('open'); document.getElementById('newName').value=''; setTimeout(()=>document.getElementById('newName').focus(),60); }
