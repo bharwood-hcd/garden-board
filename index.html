@@ -638,15 +638,22 @@ let lastFetched = null;
 
 // ── FETCH FROM GOOGLE SHEETS ──────────────────────────────
 async function fetchFromSheet(){
-  if(SHEET_API_URL === 'YOUR_APPS_SCRIPT_URL_HERE') return;
+  if(SHEET_API_URL === 'YOUR_APPS_SCRIPT_URL_HERE'){
+    console.log('Garden Board: No API URL set yet.');
+    return;
+  }
 
   const dp = document.getElementById('datePicker');
   const selectedDate = (dp && dp.value) ? dp.value : new Date().toISOString().split('T')[0];
   const url = SHEET_API_URL + '?date=' + encodeURIComponent(selectedDate);
 
+  console.log('Garden Board: Fetching URL →', url);
   setLoadingState(true);
   try {
     const res  = await fetch(url);
+    console.log('Garden Board: HTTP status →', res.status);
+    const data = await res.json();
+    console.log('Garden Board: Response →', JSON.stringify(data));
     const data = await res.json();
 
     if(!data.ok) throw new Error(data.error || 'API error');
@@ -896,18 +903,23 @@ function startEdit(td,idx,col){
   input.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();commit();} if(e.key==='Escape'){input.remove();span.style.display='';} });
 }
 
-// Date
+// Date - persist in localStorage
 (function(){
-  const dp=document.getElementById('datePicker');
-  dp.value=new Date().toISOString().split('T')[0];
-  updateDate(); dp.addEventListener('change',updateDate);
+  const dp = document.getElementById('datePicker');
+  const saved = localStorage.getItem('gardenBoardDate');
+  const today = new Date().toISOString().split('T')[0];
+  dp.value = saved || today;
+  updateDate();
+  dp.addEventListener('change', updateDate);
 })();
+
 function updateDate(){
-  const dp=document.getElementById('datePicker').value;
+  const dp = document.getElementById('datePicker').value;
   if(!dp) return;
-  const d=new Date(dp+'T00:00:00');
-  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('dayLabel').textContent=days[d.getDay()];
+  localStorage.setItem('gardenBoardDate', dp);
+  const d = new Date(dp+'T00:00:00');
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('dayLabel').textContent = days[d.getDay()];
   fetchFromSheet();
 }
 
