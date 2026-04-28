@@ -629,6 +629,8 @@ let members = [
   {name:'Joan K.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
   {name:'Afra M.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
   {name:'Joshua S.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
+  {name:'Molly S.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
+  {name:'David W.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
 ];
 
 let dataSource = 'fallback'; // 'fallback' | 'sheet'
@@ -638,12 +640,13 @@ let lastFetched = null;
 async function fetchFromSheet(){
   if(SHEET_API_URL === 'YOUR_APPS_SCRIPT_URL_HERE') return;
 
-  const selectedDate = document.getElementById('datePicker').value
-    || new Date().toISOString().split('T')[0];
+  const dp = document.getElementById('datePicker');
+  const selectedDate = (dp && dp.value) ? dp.value : new Date().toISOString().split('T')[0];
+  const url = SHEET_API_URL + '?date=' + encodeURIComponent(selectedDate);
 
   setLoadingState(true);
   try {
-    const res  = await fetch(SHEET_API_URL + '?date=' + selectedDate);
+    const res  = await fetch(url);
     const data = await res.json();
 
     if(!data.ok) throw new Error(data.error || 'API error');
