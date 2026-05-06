@@ -23,7 +23,7 @@
   --ink:        #2C1810;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
 body {
   font-family: 'Lora', Georgia, serif;
   background: var(--soil);
@@ -33,7 +33,7 @@ body {
   min-height: 100vh;
   padding: 24px 20px 48px;
 }
-
+ 
 /* ── BOARD FRAME ── */
 .board-frame {
   max-width: 1100px; margin: 0 auto;
@@ -49,7 +49,7 @@ body {
 .screw { position: absolute; width: 16px; height: 16px; background: radial-gradient(circle at 40% 35%, #c8a870, #7a5c2e); border-radius: 50%; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
 .screw::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(45deg); width: 8px; height: 1px; background: rgba(0,0,0,0.4); }
 .screw.tl{top:6px;left:6px;} .screw.tr{top:6px;right:6px;} .screw.bl{bottom:6px;left:6px;} .screw.br{bottom:6px;right:6px;}
-
+ 
 /* ── CORKBOARD ── */
 .corkboard {
   background: var(--paper);
@@ -57,7 +57,7 @@ body {
   border-radius: 2px; padding: 28px 28px 36px; position: relative; overflow: hidden;
 }
 .corkboard::before { content: '🌿'; position: absolute; bottom: -10px; right: -10px; font-size: 180px; opacity: 0.04; transform: rotate(-20deg); pointer-events: none; line-height: 1; }
-
+ 
 /* ── HEADER ── */
 .header { text-align: center; border-bottom: 2px dashed rgba(74,103,65,0.3); padding-bottom: 20px; margin-bottom: 20px; }
 .header-vine { font-size: 22px; letter-spacing: 8px; color: var(--moss-light); display: block; margin-bottom: 4px; opacity: 0.7; }
@@ -65,7 +65,7 @@ body {
 .header-title span { color: var(--moss); }
 .header-sub { font-style: italic; font-size: 14px; color: var(--bark); margin-top: 6px; }
 .header-stamp { display: inline-block; border: 2px solid var(--terracotta); color: var(--terracotta); font-family: 'Playfair Display', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; margin-top: 10px; transform: rotate(-1.5deg); }
-
+ 
 /* ── CONTROLS ── */
 .controls-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
 .date-badge { background: var(--moss); color: var(--cream); font-family: 'Playfair Display', serif; font-size: 13px; padding: 6px 16px; border-radius: 2px; display: flex; align-items: center; gap: 10px; transform: rotate(-0.5deg); box-shadow: 2px 2px 0 var(--soil-light); }
@@ -79,26 +79,26 @@ body {
 .btn-terracotta:hover { filter: brightness(1.1); transform: translate(-1px,-1px); }
 .btn-outline { background: transparent; border: 1.5px dashed var(--moss); color: var(--moss); }
 .btn-outline:hover { background: rgba(74,103,65,0.08); }
-
+ 
 /* ── GOALS STRIP ── */
 .goals-strip { background: var(--chalk); border: 1.5px dashed rgba(74,103,65,0.35); border-radius: 3px; padding: 10px 18px; margin-bottom: 24px; display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
 .goals-label { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; color: var(--bark); letter-spacing: 1.5px; text-transform: uppercase; white-space: nowrap; }
 .goal-chip { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--soil-light); font-style: italic; }
 .goal-chip input[type=number] { background: #fff; border: 1px solid rgba(74,103,65,0.3); border-radius: 2px; padding: 3px 7px; font-family: 'Lora', serif; font-size: 12px; color: var(--ink); width: 52px; text-align: center; }
 .goal-chip input:focus { outline: 1.5px solid var(--moss); }
-
+ 
 /* ══════════════════════════════════
    VIEW 1 — OVERVIEW HARVEST CARDS
 ══════════════════════════════════ */
 #view-overview { }
-
+ 
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 14px;
   margin-bottom: 24px;
 }
-
+ 
 .harvest-card {
   background: #fff;
   border: 1.5px solid rgba(107,68,35,0.18);
@@ -144,7 +144,7 @@ body {
 }
 .harvest-card:hover .card-hint { opacity: 1; }
 .harvest-card .card-goal-pct { font-size: 11px; color: var(--bark); margin-top: 4px; font-style: italic; }
-
+ 
 /* top performer strip on overview */
 .top-strip {
   background: rgba(212,160,23,0.12);
@@ -157,12 +157,12 @@ body {
 .top-strip .top-label { font-family: 'Playfair Display', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--bark); }
 .top-strip .top-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--ink); }
 .top-strip .top-score { font-size: 13px; font-style: italic; color: var(--bark); }
-
+ 
 /* ══════════════════════════════════
    VIEW 2 — CATEGORY BREAKDOWN
 ══════════════════════════════════ */
 #view-category { display: none; }
-
+ 
 .view-header {
   display: flex; align-items: center; gap: 14px;
   margin-bottom: 22px;
@@ -179,9 +179,9 @@ body {
 .view-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--ink); }
 .view-title .view-icon { margin-right: 8px; }
 .view-total-badge { margin-left: auto; background: var(--moss); color: var(--cream); font-family: 'Playfair Display', serif; font-size: 13px; padding: 5px 14px; border-radius: 2px; box-shadow: 2px 2px 0 var(--soil-light); }
-
+ 
 .breakdown-list { display: flex; flex-direction: column; gap: 10px; }
-
+ 
 .breakdown-row {
   background: #fff;
   border: 1px solid rgba(107,68,35,0.15);
@@ -195,7 +195,7 @@ body {
 }
 @keyframes slideIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
 .breakdown-row:hover { transform: translate(-2px,-1px); box-shadow: 3px 3px 0 rgba(74,103,65,0.2); border-color: var(--moss); }
-
+ 
 .breakdown-row .plot-badge { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; font-family: 'Playfair Display', serif; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.5); box-shadow: 1px 1px 0 rgba(0,0,0,0.12); }
 .breakdown-row .br-name { font-family: 'Lora', serif; font-weight: 600; font-size: 15px; color: var(--ink); min-width: 120px; }
 .breakdown-row .br-bar-wrap { flex: 1; }
@@ -205,20 +205,20 @@ body {
 .breakdown-row .br-val.met { color: var(--moss); }
 .breakdown-row .br-goal { font-size: 11px; font-style: italic; color: var(--bark); min-width: 60px; text-align: right; }
 .breakdown-row .br-hint { font-size: 10px; color: var(--moss-light); font-style: italic; white-space: nowrap; }
-
+ 
 /* rank badge */
 .rank-pip { width: 22px; height: 22px; border-radius: 50%; background: var(--chalk); border: 1px solid rgba(107,68,35,0.2); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 11px; font-weight: 700; color: var(--bark); flex-shrink: 0; }
 .rank-pip.gold { background: var(--sunflower); color: #fff; border-color: var(--sunflower); }
 .rank-pip.silver { background: #aaa; color: #fff; border-color: #aaa; }
 .rank-pip.bronze { background: var(--rust); color: #fff; border-color: var(--rust); }
-
+ 
 /* ══════════════════════════════════
    VIEW 3 — GARDENER STAT CARD
 ══════════════════════════════════ */
 #view-gardener { display: none; }
-
+ 
 .stat-card-wrap { max-width: 680px; margin: 0 auto; }
-
+ 
 .gardener-hero {
   background: #fff;
   border: 1.5px solid rgba(107,68,35,0.2);
@@ -236,9 +236,9 @@ body {
 .hero-total { text-align: right; }
 .hero-total .ht-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--moss); line-height: 1; }
 .hero-total .ht-label { font-size: 11px; color: var(--bark); letter-spacing: 1px; text-transform: uppercase; font-family: 'Playfair Display', serif; }
-
+ 
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
-
+ 
 .stat-tile {
   background: #fff;
   border: 1px solid rgba(107,68,35,0.15);
@@ -255,7 +255,7 @@ body {
 .stat-tile .st-progress { height: 3px; background: rgba(107,68,35,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; }
 .stat-tile .st-fill { height: 100%; background: var(--moss); border-radius: 2px; transition: width 0.5s ease; }
 .stat-tile .st-goal-txt { font-size: 10px; font-style: italic; color: var(--bark); margin-top: 4px; }
-
+ 
 .rank-summary {
   background: rgba(212,160,23,0.1);
   border: 1.5px dashed rgba(212,160,23,0.4);
@@ -267,7 +267,7 @@ body {
   line-height: 1.7;
 }
 .rank-summary strong { font-style: normal; color: var(--ink); }
-
+ 
 /* ── SHARED TABLE ── */
 .table-scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; min-width: 820px; }
@@ -295,7 +295,7 @@ td.editable:hover .cell-val { color: var(--moss); }
 .total-row td { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--moss); }
 .total-row td:first-child { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--bark); font-style: italic; font-family: 'Lora', serif; }
 .edit-input { background: #fff; border: 1.5px solid var(--moss); border-radius: 2px; color: var(--ink); padding: 4px 8px; font-family: 'Lora', serif; font-size: 14px; width: 58px; text-align: center; outline: none; box-shadow: 1px 1px 0 var(--moss-light); }
-
+ 
 /* ── BONUS TRACKER STRIP ── */
 .bonus-strip {
   background: var(--chalk);
@@ -328,7 +328,7 @@ td.editable:hover .cell-val { color: var(--moss); }
   font-size: 12px; font-style: italic; color: var(--moss);
   white-space: nowrap;
 }
-
+ 
 .bonus-bar-wrap { position: relative; margin-bottom: 10px; }
 .bonus-bar-track {
   height: 22px; background: rgba(107,68,35,0.1);
@@ -343,7 +343,7 @@ td.editable:hover .cell-val { color: var(--moss); }
 .bonus-bar-fill.bonus   { background: var(--moss); }
 .bonus-bar-fill.double  { background: var(--sunflower); }
 .bonus-bar-fill.triple  { background: #7DB56A; }
-
+ 
 .bonus-markers { position: relative; height: 28px; }
 .bonus-marker {
   position: absolute; top: 0;
@@ -362,7 +362,7 @@ td.editable:hover .cell-val { color: var(--moss); }
 }
 .bonus-marker.achieved .marker-label { color: var(--moss); font-weight: 700; }
 .bonus-marker.achieved .marker-line  { background: var(--moss); }
-
+ 
 .bonus-status-row {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   margin-top: 4px;
@@ -377,16 +377,16 @@ td.editable:hover .cell-val { color: var(--moss); }
 .badge-double  { background: rgba(212,160,23,0.18); color: #8B6914;            border: 1px solid rgba(212,160,23,0.4); }
 .badge-triple  { background: rgba(125,181,106,0.2); color: #2F6B2F;            border: 1px solid rgba(125,181,106,0.4); }
 .bonus-to-next { font-size: 12px; font-style: italic; color: var(--bark); }
-
+ 
 .sync-badge { font-family: 'Lora', serif; font-size: 12px; font-style: italic; padding: 6px 12px; border-radius: 2px; border: 1px dashed; white-space: nowrap; }
 .sync-badge.live    { color: var(--moss);       border-color: rgba(74,103,65,0.4);  background: rgba(74,103,65,0.07); }
 .sync-badge.local   { color: var(--bark);       border-color: rgba(107,68,35,0.3); background: rgba(107,68,35,0.05); }
 .sync-badge.syncing { color: var(--sunflower);  border-color: rgba(212,160,23,0.4); background: rgba(212,160,23,0.07); }
-
+ 
 /* ── FOOTER ── */
 hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); margin: 24px 0 14px; }
 .footer { text-align: center; font-style: italic; font-size: 12px; color: var(--bark); opacity: 0.7; }
-
+ 
 /* ── MODAL ── */
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(44,24,16,0.7); z-index: 100; align-items: center; justify-content: center; }
 .modal-bg.open { display: flex; }
@@ -405,7 +405,7 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
   <div class="screw tl"></div><div class="screw tr"></div>
   <div class="screw bl"></div><div class="screw br"></div>
   <div class="corkboard">
-
+ 
     <!-- HEADER -->
     <div class="header">
       <span class="header-vine">🌿 ✦ 🌿</span>
@@ -413,7 +413,7 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
       <div class="header-sub">Tending to our daily harvest — one application at a time</div>
       <div class="header-stamp">Community Plot &mdash; Season Tracker</div>
     </div>
-
+ 
     <!-- CONTROLS -->
     <div class="controls-row">
       <div class="date-badge">
@@ -428,16 +428,16 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
         <button class="btn btn-terracotta" onclick="saveCSV()">🌾 Harvest Report</button>
       </div>
     </div>
-
+ 
     <!-- BONUS TRACKER STRIP -->
     <div class="bonus-strip" id="bonusStrip"></div>
-
+ 
     <!-- ═══ VIEW 1: OVERVIEW ═══ -->
     <div id="view-overview">
       <div class="overview-grid" id="harvestCards"></div>
       <div class="top-strip" id="topStrip"></div>
     </div>
-
+ 
     <!-- ═══ VIEW 2: CATEGORY BREAKDOWN ═══ -->
     <div id="view-category">
       <div class="view-header">
@@ -447,7 +447,7 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
       </div>
       <div class="breakdown-list" id="breakdownList"></div>
     </div>
-
+ 
     <!-- ═══ VIEW 3: GARDENER STAT CARD ═══ -->
     <div id="view-gardener">
       <div class="view-header">
@@ -460,13 +460,13 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
         <div class="rank-summary" id="rankSummary"></div>
       </div>
     </div>
-
+ 
     <hr class="footer-divider">
     <div class="footer">Click a harvest card to see who contributed · Click a gardener name for their stat card</div>
-
+ 
   </div>
 </div>
-
+ 
 <!-- ADD MODAL -->
 <div class="modal-bg" id="addModal">
   <div class="modal">
@@ -479,7 +479,7 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
     </div>
   </div>
 </div>
-
+ 
 <!-- EDIT MODAL -->
 <div class="modal-bg" id="editModal">
   <div class="modal">
@@ -493,31 +493,32 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
     </div>
   </div>
 </div>
-
+ 
 <div class="toast" id="toast"></div>
-
+ 
 <script>
 const COLS     = ['apps','inbound','outbound','revived','payoffs','lps'];
 const COL_META = [
-  {key:'apps',     label:'Apps Submitted',    icon:'📋', color:'#4A6741'},
-  {key:'inbound',  label:'Inbound Calls',      icon:'📞', color:'#2F6B55'},
-  {key:'outbound', label:'Outbound Calls',     icon:'📲', color:'#3A6B6B'},
-  {key:'revived',  label:'Apps Revived',       icon:'🌱', color:'#5A6B2A'},
-  {key:'payoffs',  label:'Payoffs Completed',  icon:'✅', color:'#6B4423'},
-  {key:'lps',      label:'LPS ToDo Fulfilled', icon:'🗂️', color:'#7A4F2D'},
+  {key:'apps',     label:'Apps Submitted',    icon:'📋', color:'#4A6741', weight:0.5},
+  {key:'inbound',  label:'Inbound Calls',      icon:'📞', color:'#2F6B55', weight:0.5},
+  {key:'outbound', label:'Outbound Calls',     icon:'📲', color:'#3A6B6B', weight:0.25},
+  {key:'revived',  label:'Apps Revived',       icon:'🌱', color:'#5A6B2A', weight:0.5},
+  {key:'payoffs',  label:'Payoffs Completed',  icon:'✅', color:'#6B4423', weight:1.0},
+  {key:'lps',      label:'LPS ToDo Fulfilled', icon:'🗂️', color:'#7A4F2D', weight:0.5},
 ];
-
+ 
 /* ── BONUS CONFIG ── */
-const BONUS_TIERS = [
+// These are fallback values — overridden by the goals tab in Google Sheets
+let BONUS_TIERS = [
   { key:'bonus',  label:'Bonus',        amount: 1400000 },
   { key:'double', label:'Double Bonus', amount: 1600000 },
   { key:'triple', label:'Triple Bonus', amount: 1800000 },
 ];
 const BONUS_MONTH_START = new Date('2026-04-01');
 const BONUS_MONTH_END   = new Date('2026-04-30');
-
+ 
 let currentRevenue = 1632119.34;
-
+ 
 function workingDaysLeft(){
   const today = new Date();
   today.setHours(0,0,0,0);
@@ -529,24 +530,24 @@ function workingDaysLeft(){
   }
   return Math.max(count, 1);
 }
-
+ 
 function renderBonusStrip(){
   const rev = currentRevenue;
   const tripleGoal = BONUS_TIERS[2].amount;
   const displayMax = tripleGoal * 1.02;
   const pct = Math.min(100, rev / displayMax * 100);
-
+ 
   // which tier are we at?
   let tierKey = 'below';
   for(let i = BONUS_TIERS.length-1; i >= 0; i--){
     if(rev >= BONUS_TIERS[i].amount){ tierKey = BONUS_TIERS[i].key; break; }
   }
-
+ 
   // daily needed for next tier
   const nextTier = BONUS_TIERS.find(t => rev < t.amount);
   const daysLeft = workingDaysLeft();
   const dailyNeeded = nextTier ? Math.max(0, (nextTier.amount - rev) / daysLeft) : 0;
-
+ 
   // badge
   const badgeMap = {
     below:  {cls:'badge-below',  text:'Below Bonus'},
@@ -555,7 +556,7 @@ function renderBonusStrip(){
     triple: {cls:'badge-triple', text:'✦✦✦ Triple Bonus!'},
   };
   const badge = badgeMap[tierKey];
-
+ 
   // markers
   const markers = BONUS_TIERS.map(t => {
     const mPct = Math.min(99, t.amount / displayMax * 100);
@@ -565,17 +566,17 @@ function renderBonusStrip(){
       <div class="marker-label">${t.label}</div>
     </div>`;
   }).join('');
-
+ 
   // to-next text
   const toNextText = nextTier
     ? `$${Math.ceil(nextTier.amount - rev).toLocaleString()} to ${nextTier.label} &nbsp;·&nbsp; need $${Math.ceil(dailyNeeded).toLocaleString()}/day (${daysLeft} working day${daysLeft!==1?'s':''} left)`
     : `🌻 Triple Bonus secured! What a harvest!`;
-
+ 
   // daily goal for triple (the stretch)
   const dailyForTriple = nextTier
     ? `Daily needed: <strong>$${Math.ceil(dailyNeeded).toLocaleString()}</strong> to reach ${nextTier.label}`
     : `All bonus tiers achieved 🌿`;
-
+ 
   document.getElementById('bonusStrip').innerHTML = `
     <div class="bonus-header">
       <div class="bonus-title">🌻 April 2026 — Monthly Bonus Goals</div>
@@ -598,7 +599,7 @@ function renderBonusStrip(){
       <span class="bonus-to-next">${toNextText}</span>
     </div>`;
 }
-
+ 
 function updateRevenue(raw){
   const cleaned = raw.replace(/[$,]/g,'');
   const val = parseFloat(cleaned);
@@ -611,15 +612,15 @@ function updateRevenue(raw){
 // ── GOOGLE SHEETS CONNECTION ──────────────────────────────
 // After Step 4 of the setup guide, replace the placeholder below
 // with your actual Apps Script URL.
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbw_1iv4f47YTKWQt5QsUjZw5Z8drguETDhtbImnzxqAlswiBWgXNPxbfcpiQqZn6c8t1w/exec';
-
+const SHEET_API_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+ 
 const PLOT_COLORS = [
   {bg:'#4A6741',fg:'#E8D5A3'},{bg:'#7A4F2D',fg:'#F5EDD8'},
   {bg:'#2F6B55',fg:'#D8EDD5'},{bg:'#8B6914',fg:'#FAF4E8'},
   {bg:'#5C3D1E',fg:'#F0E6CC'},{bg:'#3A6B6B',fg:'#D5EDEC'},
   {bg:'#6B4A3A',fg:'#F0E6CC'},{bg:'#5A6B2A',fg:'#EFF5D5'},
 ];
-
+ 
 // Fallback members shown before Sheet data loads
 let members = [
   {name:'Skylar A.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
@@ -632,21 +633,21 @@ let members = [
   {name:'Molly S.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
   {name:'David W.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
 ];
-
+ 
 let dataSource = 'fallback'; // 'fallback' | 'sheet'
 let lastFetched = null;
-
+ 
 // ── FETCH FROM GOOGLE SHEETS ──────────────────────────────
 async function fetchFromSheet(){
   if(SHEET_API_URL === 'YOUR_APPS_SCRIPT_URL_HERE'){
     console.log('Garden Board: No API URL set yet.');
     return;
   }
-
+ 
   const dp = document.getElementById('datePicker');
   const selectedDate = (dp && dp.value) ? dp.value : new Date().toISOString().split('T')[0];
   const url = SHEET_API_URL + '?date=' + encodeURIComponent(selectedDate);
-
+ 
   console.log('Garden Board: Fetching URL →', url);
   setLoadingState(true);
   try {
@@ -654,21 +655,21 @@ async function fetchFromSheet(){
     console.log('Garden Board: HTTP status →', res.status);
     const data = await res.json();
     console.log('Garden Board: Response →', JSON.stringify(data));
-
+ 
     if(!data.ok) throw new Error(data.error || 'API error');
-
+ 
     // Merge sheet data into members (preserves order, fills zeros for anyone not in sheet)
     if(data.members && data.members.length > 0){
       // Build a lookup by name
       const sheetMap = {};
       data.members.forEach(m => { sheetMap[m.name] = m; });
-
+ 
       // Update existing members from sheet, keep fallback for anyone not in sheet
       members = members.map(m => sheetMap[m.name]
         ? { ...m, ...sheetMap[m.name] }
         : m
       );
-
+ 
       // Add any new names from sheet not already in members list
       data.members.forEach(m => {
         if(!members.find(x => x.name === m.name)){
@@ -676,33 +677,41 @@ async function fetchFromSheet(){
         }
       });
     }
-
+ 
+    // Update bonus goals from sheet
+    if(data.bonusGoals){
+      BONUS_TIERS = BONUS_TIERS.map(t => ({
+        ...t,
+        amount: data.bonusGoals[t.key] ?? t.amount
+      }));
+    }
+ 
     // Update revenue from sheet
     if(typeof data.revenue === 'number' && data.revenue > 0){
       currentRevenue = data.revenue;
     }
-
+ 
     dataSource  = 'sheet';
     lastFetched = new Date();
     setLoadingState(false);
     renderAll();
     updateSyncBadge();
     showToast('🌿 Garden refreshed from Sheet!');
-
+ 
   } catch(err) {
     setLoadingState(false);
     showToast('⚠️ Could not reach Sheet — showing cached data');
     console.error('Sheet fetch error:', err);
   }
 }
-
+ 
 function setLoadingState(loading){
   const badge = document.getElementById('syncBadge');
   if(!badge) return;
   badge.textContent = loading ? '⏳ Syncing...' : (dataSource === 'sheet' ? '🌿 Live from Sheet' : '📋 Local data');
   badge.className   = 'sync-badge ' + (loading ? 'syncing' : dataSource === 'sheet' ? 'live' : 'local');
 }
-
+ 
 function updateSyncBadge(){
   const badge = document.getElementById('syncBadge');
   if(!badge) return;
@@ -712,20 +721,21 @@ function updateSyncBadge(){
   badge.title = timeStr;
   setLoadingState(false);
 }
-
+ 
 // Auto-refresh every 5 minutes
 setInterval(fetchFromSheet, 5 * 60 * 1000);
-
+ 
 let editingIdx = null;
 let currentView = 'overview';
 let prevView = 'overview';
-
+ 
 function initials(n){ return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
-function score(m){ return COLS.reduce((s,c)=>s+(m[c]||0),0); }
-
+function score(m){ return COL_META.reduce((s,meta)=>s+((m[meta.key]||0)*meta.weight),0); }
+function scoreDisplay(m){ return score(m).toFixed(1); }
+ 
 function sorted(){ return [...members].sort((a,b)=>{ const la=a.name.split(' ').pop(), lb=b.name.split(' ').pop(); return la.localeCompare(lb); }); }
 function topMember(){ const s=sorted(); let best=s[0]; s.forEach(m=>{ if(score(m)>score(best)) best=m; }); return best; }
-
+ 
 function showView(v, fromCat){
   ['overview','category','gardener'].forEach(id=>{
     document.getElementById('view-'+id).style.display = id===v ? 'block' : 'none';
@@ -733,24 +743,26 @@ function showView(v, fromCat){
   currentView = v;
   if(fromCat) prevView = fromCat;
 }
-
+ 
 /* ── OVERVIEW ── */
 function renderOverview(){
   const totals = COLS.map(c=>members.reduce((s,m)=>s+(m[c]||0),0));
-
+ 
   let cards = '';
   COL_META.forEach((meta,i)=>{
     const total = totals[i];
+    const weightedTotal = (members.reduce((s,m)=>s+((m[meta.key]||0)*meta.weight),0)).toFixed(1);
     cards += `
       <div class="harvest-card" onclick="showCategory('${meta.key}')">
         <span class="card-icon">${meta.icon}</span>
         <div class="card-total">${total}</div>
         <span class="card-label">${meta.label}</span>
+        <div style="font-size:10px;color:var(--bark);font-style:italic;margin-top:4px;">${weightedTotal} pts &nbsp;·&nbsp; ×${meta.weight} each</div>
         <div class="card-hint">Click to see breakdown ↓</div>
       </div>`;
   });
   document.getElementById('harvestCards').innerHTML = cards;
-
+ 
   const top = topMember();
   const topScore = score(top);
   const topClr = PLOT_COLORS[members.indexOf(top) % PLOT_COLORS.length];
@@ -760,23 +772,23 @@ function renderOverview(){
          <div class="top-label">👑 Today's Top Cultivator</div>
          <div class="top-name">${top.name}</div>
        </div>
-       <div class="top-score" style="margin-left:auto;">${topScore} total across all plots</div>`
+       <div class="top-score" style="margin-left:auto;">${scoreDisplay(top)} weighted points</div>`
     : `<div class="top-label" style="font-style:italic;color:var(--bark);">Enter numbers to see today's top cultivator 🌱</div>`;
 }
-
+ 
 /* ── CATEGORY BREAKDOWN ── */
 function showCategory(colKey){
   const meta = COL_META.find(m=>m.key===colKey);
   const s = sorted();
   const colTotal = members.reduce((sum,m)=>sum+(m[colKey]||0),0);
-
+ 
   document.getElementById('catIcon').textContent = meta.icon + ' ';
   document.getElementById('catTitle').textContent = meta.label;
   document.getElementById('catTotal').textContent = colTotal + ' total';
-
+ 
   const ranked = [...s].sort((a,b)=>(b[colKey]||0)-(a[colKey]||0));
   const maxVal = ranked[0] ? (ranked[0][colKey]||0) : 1;
-
+ 
   let html = '';
   ranked.forEach((m,ri)=>{
     const origIdx = members.indexOf(m);
@@ -796,17 +808,17 @@ function showCategory(colKey){
         <div class="br-hint">View card →</div>
       </div>`;
   });
-
+ 
   document.getElementById('breakdownList').innerHTML = html;
   showView('category');
 }
-
+ 
 /* ── GARDENER STAT CARD ── */
 function showGardener(idx, fromColKey){
   const m = members[idx];
   const clr = PLOT_COLORS[idx % PLOT_COLORS.length];
   const totalScore = score(m);
-
+ 
   if(fromColKey){
     document.getElementById('gardenerBackBtn').onclick = ()=>showCategory(fromColKey);
     document.getElementById('gardenerBackBtn').textContent = '← Back to ' + COL_META.find(c=>c.key===fromColKey).label;
@@ -814,12 +826,12 @@ function showGardener(idx, fromColKey){
     document.getElementById('gardenerBackBtn').onclick = ()=>showView('overview');
     document.getElementById('gardenerBackBtn').textContent = '← Back to Garden';
   }
-
+ 
   const topColKey = COLS.reduce((best,c)=>(m[c]||0)>(m[best]||0)?c:best, COLS[0]);
   const topColMeta = COL_META.find(c=>c.key===topColKey);
-
+ 
   document.getElementById('gardenerTitle').textContent = m.name + "'s Plot";
-
+ 
   document.getElementById('gardenerHero').innerHTML = `
     <div class="hero-avatar" style="background:${clr.bg};color:${clr.fg};">${initials(m.name)}</div>
     <div class="hero-info">
@@ -827,38 +839,39 @@ function showGardener(idx, fromColKey){
       <div class="hero-tagline">${totalScore > 0 ? 'Strongest in '+topColMeta.label+' '+topColMeta.icon : 'Ready to grow something great 🌱'}</div>
     </div>
     <div class="hero-total">
-      <div class="ht-num">${totalScore}</div>
-      <div class="ht-label">Total Today</div>
+      <div class="ht-num">${scoreDisplay(m)}</div>
+      <div class="ht-label">Weighted Points</div>
     </div>`;
-
+ 
   let tiles = '';
   COL_META.forEach((meta,i)=>{
     const val = m[meta.key]||0;
+    const weighted = (val * meta.weight).toFixed(1);
     const rankInCol = [...members].sort((a,b)=>(b[meta.key]||0)-(a[meta.key]||0)).findIndex(x=>x===m)+1;
     tiles += `
       <div class="stat-tile">
         <span class="st-icon">${meta.icon}</span>
         <div class="st-val">${val}</div>
         <span class="st-label">${meta.label}</span>
-        <div class="st-goal-txt">#${rankInCol} on team</div>
+        <div class="st-goal-txt">${weighted} pts &nbsp;·&nbsp; ×${meta.weight} &nbsp;·&nbsp; #${rankInCol} on team</div>
       </div>`;
   });
   document.getElementById('statGrid').innerHTML = tiles;
-
+ 
   const overallRank = [...members].sort((a,b)=>score(b)-score(a)).findIndex(x=>x===m)+1;
   document.getElementById('rankSummary').innerHTML =
-    `<strong>${m.name}</strong> is ranked <strong>#${overallRank} of ${members.length}</strong> overall today with <strong>${totalScore} total actions</strong>.` +
+    `<strong>${m.name}</strong> is ranked <strong>#${overallRank} of ${members.length}</strong> overall today with <strong>${scoreDisplay(m)} weighted points</strong>.` +
     (overallRank===1 && totalScore>0 ? ' 👑 Leading the garden today!' : overallRank===members.length && totalScore===0 ? ' Time to get growing! 🌱' : '');
-
+ 
   showView('gardener');
 }
-
+ 
 /* ── FULL TABLE ── */
 function renderTable(){
   const s = sorted();
   const topScore = s.reduce((mx,m)=>Math.max(mx,score(m)),0);
   const totals = COLS.map(c=>members.reduce((sum,m)=>sum+(m[c]||0),0));
-
+ 
   let html = '';
   s.forEach((m,si)=>{
     const origIdx = members.indexOf(m);
@@ -882,14 +895,14 @@ function renderTable(){
   html+=`<tr class="total-row"><td>🌾 Full Garden Harvest</td>${totals.map(t=>`<td>${t}</td>`).join('')}</tr>`;
   if(document.getElementById('tbody')) document.getElementById('tbody').innerHTML = html;
 }
-
+ 
 function renderAll(){
   renderBonusStrip();
   renderOverview();
   renderTable();
   if(currentView==='overview') showView('overview');
 }
-
+ 
 function startEdit(td,idx,col){
   if(td.querySelector('.edit-input')) return;
   const span=td.querySelector('.cell-val');
@@ -901,7 +914,7 @@ function startEdit(td,idx,col){
   input.addEventListener('blur',commit);
   input.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();commit();} if(e.key==='Escape'){input.remove();span.style.display='';} });
 }
-
+ 
 // Date - persist in localStorage
 (function(){
   const dp = document.getElementById('datePicker');
@@ -911,7 +924,7 @@ function startEdit(td,idx,col){
   updateDate();
   dp.addEventListener('change', updateDate);
 })();
-
+ 
 function updateDate(){
   const dp = document.getElementById('datePicker').value;
   if(!dp) return;
@@ -921,14 +934,14 @@ function updateDate(){
   document.getElementById('dayLabel').textContent = days[d.getDay()];
   fetchFromSheet();
 }
-
+ 
 function openAddMember(){ document.getElementById('addModal').classList.add('open'); document.getElementById('newName').value=''; setTimeout(()=>document.getElementById('newName').focus(),60); }
 function closeModal(){ document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('open')); editingIdx=null; }
 function addMember(){ const name=document.getElementById('newName').value.trim(); if(!name) return; members.push({name,apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0}); closeModal(); renderAll(); showToast('🌱 '+name+' has joined the garden!'); }
 function openEditMember(idx){ editingIdx=idx; document.getElementById('editName').value=members[idx].name; document.getElementById('editModal').classList.add('open'); setTimeout(()=>document.getElementById('editName').focus(),60); }
 function saveEdit(){ const name=document.getElementById('editName').value.trim(); if(!name||editingIdx===null) return; members[editingIdx].name=name; closeModal(); renderAll(); }
 function deleteMember(){ if(editingIdx===null) return; if(confirm('Remove '+members[editingIdx].name+' from the garden?')){ members.splice(editingIdx,1); closeModal(); renderAll(); showToast('Plot cleared.'); } }
-
+ 
 function saveCSV(){
   const headers=['Name','Apps Submitted','Inbound Calls','Outbound Calls','Apps Revived','Payoffs Completed','LPS ToDo Fulfilled'];
   const s=sorted();
@@ -940,14 +953,14 @@ function saveCSV(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`garden-harvest-${dp}.csv`; a.click();
   showToast('🌾 Harvest report saved!');
 }
-
+ 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
-
+ 
 document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)closeModal();}));
-
+ 
 showView('overview');
 renderAll();
-
+ 
 // Attempt to load live data from Sheet on page open
 fetchFromSheet();
 </script>
