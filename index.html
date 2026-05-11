@@ -497,14 +497,15 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
 <div class="toast" id="toast"></div>
 
 <script>
-const COLS     = ['apps','inbound','outbound','revived','payoffs','lps'];
+const COLS     = ['apps','inbound','outbound','revived','payoffs','lps','csi'];
 const COL_META = [
-  {key:'apps',     label:'Apps Submitted',    icon:'📋', color:'#4A6741', weight:0.5},
-  {key:'inbound',  label:'Inbound Calls',      icon:'📞', color:'#2F6B55', weight:0.5},
+  {key:'apps',     label:'Apps Submitted',    icon:'📋', color:'#4A6741', weight:0.5 },
+  {key:'inbound',  label:'Inbound Calls',      icon:'📞', color:'#2F6B55', weight:0.5 },
   {key:'outbound', label:'Outbound Calls',     icon:'📲', color:'#3A6B6B', weight:0.25},
-  {key:'revived',  label:'Apps Revived',       icon:'🌱', color:'#5A6B2A', weight:0.5},
-  {key:'payoffs',  label:'Payoffs Completed',  icon:'✅', color:'#6B4423', weight:1.0},
-  {key:'lps',      label:'LPS ToDo Fulfilled', icon:'🗂️', color:'#7A4F2D', weight:0.5},
+  {key:'revived',  label:'Apps Revived',       icon:'🌱', color:'#5A6B2A', weight:0.5 },
+  {key:'payoffs',  label:'Payoffs Completed',  icon:'✅', color:'#6B4423', weight:1.0 },
+  {key:'lps',      label:'LPS ToDo Fulfilled', icon:'🗂️', color:'#7A4F2D', weight:0.5 },
+  {key:'csi',      label:'CSI Verifications',  icon:'🔍', color:'#3A5A7A', weight:0.5 },
 ];
 
 /* ── BONUS CONFIG ── */
@@ -613,7 +614,7 @@ function updateRevenue(raw){
 // ── GOOGLE SHEETS CONNECTION ──────────────────────────────
 // After Step 4 of the setup guide, replace the placeholder below
 // with your actual Apps Script URL.
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbw_1iv4f47YTKWQt5QsUjZw5Z8drguETDhtbImnzxqAlswiBWgXNPxbfcpiQqZn6c8t1w/exec';
+const SHEET_API_URL = https://script.google.com/macros/s/AKfycbw_1iv4f47YTKWQt5QsUjZw5Z8drguETDhtbImnzxqAlswiBWgXNPxbfcpiQqZn6c8t1w/exec';
 
 const PLOT_COLORS = [
   {bg:'#4A6741',fg:'#E8D5A3'},{bg:'#7A4F2D',fg:'#F5EDD8'},
@@ -624,15 +625,15 @@ const PLOT_COLORS = [
 
 // Fallback members shown before Sheet data loads
 let members = [
-  {name:'Skylar A.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
-  {name:'Steve C.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
-  {name:'Mason D.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
-  {name:'Brandon H.', apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
-  {name:'Joan K.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
-  {name:'Afra M.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
-  {name:'Joshua S.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
-  {name:'Molly S.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
-  {name:'David W.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0},
+  {name:'Skylar A.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'Steve C.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'Mason D.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'Brandon H.', apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'Joan K.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'Afra M.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'Joshua S.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'Molly S.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'David W.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
 ];
 
 let dataSource = 'fallback'; // 'fallback' | 'sheet'
@@ -689,8 +690,8 @@ async function fetchFromSheet(){
 
     // Update month config from sheet
     if(data.monthName)  BONUS_MONTH_NAME  = data.monthName;
-    if(data.monthStart) BONUS_MONTH_START = new Date(data.monthStart + 'T00:00:00');
-    if(data.monthEnd)   BONUS_MONTH_END   = new Date(data.monthEnd   + 'T00:00:00');
+    if(data.monthStart && !data.monthStart.includes('GMT')) BONUS_MONTH_START = new Date(data.monthStart + 'T00:00:00');
+    if(data.monthEnd   && !data.monthEnd.includes('GMT'))   BONUS_MONTH_END   = new Date(data.monthEnd   + 'T00:00:00');
 
     // Update revenue from sheet
     if(typeof data.revenue === 'number' && data.revenue > 0){
@@ -943,15 +944,15 @@ function updateDate(){
 
 function openAddMember(){ document.getElementById('addModal').classList.add('open'); document.getElementById('newName').value=''; setTimeout(()=>document.getElementById('newName').focus(),60); }
 function closeModal(){ document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('open')); editingIdx=null; }
-function addMember(){ const name=document.getElementById('newName').value.trim(); if(!name) return; members.push({name,apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0}); closeModal(); renderAll(); showToast('🌱 '+name+' has joined the garden!'); }
+function addMember(){ const name=document.getElementById('newName').value.trim(); if(!name) return; members.push({name,apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0}); closeModal(); renderAll(); showToast('🌱 '+name+' has joined the garden!'); }
 function openEditMember(idx){ editingIdx=idx; document.getElementById('editName').value=members[idx].name; document.getElementById('editModal').classList.add('open'); setTimeout(()=>document.getElementById('editName').focus(),60); }
 function saveEdit(){ const name=document.getElementById('editName').value.trim(); if(!name||editingIdx===null) return; members[editingIdx].name=name; closeModal(); renderAll(); }
 function deleteMember(){ if(editingIdx===null) return; if(confirm('Remove '+members[editingIdx].name+' from the garden?')){ members.splice(editingIdx,1); closeModal(); renderAll(); showToast('Plot cleared.'); } }
 
 function saveCSV(){
-  const headers=['Name','Apps Submitted','Inbound Calls','Outbound Calls','Apps Revived','Payoffs Completed','LPS ToDo Fulfilled'];
+  const headers=['Name','Apps Submitted','Inbound Calls','Outbound Calls','Apps Revived','Payoffs Completed','LPS ToDo Fulfilled','CSI Verifications'];
   const s=sorted();
-  const rows=s.map(m=>[m.name,m.apps,m.inbound,m.outbound,m.revived,m.payoffs,m.lps].join(','));
+  const rows=s.map(m=>[m.name,m.apps,m.inbound,m.outbound,m.revived,m.payoffs,m.lps,m.csi||0].join(','));
   const totals=COLS.map(c=>members.reduce((sum,m)=>sum+(m[c]||0),0));
   rows.push(['GARDEN TOTAL',...totals].join(','));
   const dp=document.getElementById('datePicker').value||new Date().toISOString().split('T')[0];
