@@ -383,6 +383,98 @@ td.editable:hover .cell-val { color: var(--moss); }
 .sync-badge.local   { color: var(--bark);       border-color: rgba(107,68,35,0.3); background: rgba(107,68,35,0.05); }
 .sync-badge.syncing { color: var(--sunflower);  border-color: rgba(212,160,23,0.4); background: rgba(212,160,23,0.07); }
 
+/* ── NAV TABS ── */
+.nav-tabs {
+  display: flex; gap: 0; margin-bottom: 20px;
+  border-bottom: 2px dashed rgba(74,103,65,0.3);
+}
+.nav-tab {
+  font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 10px 22px; cursor: pointer; border: none; background: transparent;
+  color: var(--bark); border-bottom: 3px solid transparent;
+  margin-bottom: -2px; transition: all 0.15s;
+}
+.nav-tab:hover { color: var(--moss); }
+.nav-tab.active { color: var(--moss); border-bottom-color: var(--moss); }
+
+/* ── SEASON REPORT ── */
+#view-season { display: none; }
+
+.season-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px; margin-bottom: 24px;
+}
+.season-title-block {}
+.season-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--ink); }
+.season-sub { font-style: italic; font-size: 13px; color: var(--bark); margin-top: 4px; }
+.season-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+.season-meta-chip {
+  background: #fff; border: 1px solid rgba(107,68,35,0.18);
+  border-radius: 3px; padding: 8px 14px; text-align: center;
+  box-shadow: 1px 1px 0 rgba(107,68,35,0.08);
+}
+.season-meta-chip .smc-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--moss); }
+.season-meta-chip .smc-label { font-size: 10px; color: var(--bark); letter-spacing: 1px; text-transform: uppercase; font-family: 'Playfair Display', serif; margin-top: 2px; }
+
+.season-month-picker {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--bark); font-style: italic;
+}
+.season-month-picker input[type=month] {
+  background: var(--chalk); border: 1px solid rgba(107,68,35,0.25);
+  border-radius: 2px; padding: 6px 10px; font-family: 'Lora', serif;
+  font-size: 13px; color: var(--ink); cursor: pointer;
+}
+.season-month-picker input:focus { outline: 1.5px solid var(--moss); }
+
+.season-team-totals {
+  background: #fff; border: 1.5px solid rgba(107,68,35,0.15);
+  border-radius: 4px; padding: 18px 20px; margin-bottom: 20px;
+  box-shadow: 2px 2px 0 rgba(107,68,35,0.08);
+}
+.season-team-totals-title {
+  font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--bark);
+  margin-bottom: 14px;
+}
+.season-totals-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px;
+}
+.season-total-chip {
+  text-align: center; padding: 10px 8px;
+  background: var(--chalk); border-radius: 3px;
+  border: 1px dashed rgba(107,68,35,0.2);
+}
+.season-total-chip .stc-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+.season-total-chip .stc-val { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--ink); }
+.season-total-chip .stc-label { font-size: 10px; color: var(--bark); letter-spacing: 0.8px; text-transform: uppercase; font-family: 'Playfair Display', serif; margin-top: 3px; display: block; }
+.season-total-chip .stc-pts { font-size: 10px; color: var(--moss); font-style: italic; margin-top: 2px; }
+
+.season-gardener-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;
+}
+.season-gardener-card {
+  background: #fff; border: 1.5px solid rgba(107,68,35,0.15);
+  border-radius: 4px; padding: 18px; box-shadow: 2px 2px 0 rgba(107,68,35,0.08);
+  transition: all 0.15s;
+}
+.season-gardener-card:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 rgba(74,103,65,0.18); }
+.sgc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.sgc-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.5); box-shadow: 1px 1px 0 rgba(0,0,0,0.12); }
+.sgc-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--ink); }
+.sgc-rank { font-size: 11px; font-style: italic; color: var(--bark); }
+.sgc-score-block { margin-left: auto; text-align: right; }
+.sgc-score { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--moss); line-height: 1; }
+.sgc-score-label { font-size: 10px; color: var(--bark); letter-spacing: 1px; text-transform: uppercase; font-family: 'Playfair Display', serif; }
+.sgc-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.sgc-metric { text-align: center; padding: 6px 4px; background: var(--chalk); border-radius: 2px; }
+.sgc-metric .sgcm-icon { font-size: 13px; display: block; }
+.sgc-metric .sgcm-val { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+.sgc-metric .sgcm-label { font-size: 9px; color: var(--bark); text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Playfair Display', serif; display: block; margin-top: 1px; }
+
+.season-loading { text-align: center; font-style: italic; color: var(--bark); padding: 40px; font-size: 14px; }
+
 /* ── FOOTER ── */
 hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); margin: 24px 0 14px; }
 .footer { text-align: center; font-style: italic; font-size: 12px; color: var(--bark); opacity: 0.7; }
@@ -413,6 +505,15 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
       <div class="header-sub">Tending to our daily harvest — one application at a time</div>
       <div class="header-stamp">Community Plot &mdash; Season Tracker</div>
     </div>
+
+    <!-- NAV TABS -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-daily" onclick="switchTab('daily')">🌱 Daily Garden</button>
+      <button class="nav-tab" id="tab-season" onclick="switchTab('season')">🌾 Season Report</button>
+    </div>
+
+    <!-- DAILY PANEL -->
+    <div id="panel-daily">
 
     <!-- CONTROLS -->
     <div class="controls-row">
@@ -460,6 +561,29 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
         <div class="rank-summary" id="rankSummary"></div>
       </div>
     </div>
+
+    </div><!-- /panel-daily -->
+
+    <!-- ═══ SEASON REPORT PANEL ═══ -->
+    <div id="panel-season" style="display:none;">
+      <div class="season-header">
+        <div class="season-title-block">
+          <div class="season-title">🌾 Season Report</div>
+          <div class="season-sub" id="seasonSub">Monthly team harvest — all gardeners, all plots</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div class="season-month-picker">
+            📅 &nbsp;
+            <input type="month" id="monthPicker" onchange="fetchMonthlyData()">
+          </div>
+          <div class="season-meta" id="seasonMeta"></div>
+        </div>
+      </div>
+      <div class="season-team-totals" id="seasonTeamTotals">
+        <div class="season-loading">🌱 Select a month to load the season report...</div>
+      </div>
+      <div class="season-gardener-grid" id="seasonGardenerGrid"></div>
+    </div><!-- /panel-season -->
 
     <hr class="footer-divider">
     <div class="footer">Click a harvest card to see who contributed · Click a gardener name for their stat card</div>
@@ -963,12 +1087,145 @@ function saveCSV(){
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
 
+// ── TAB SWITCHING ─────────────────────────────────────────
+function switchTab(tab){
+  document.getElementById('panel-daily').style.display  = tab === 'daily'  ? 'block' : 'none';
+  document.getElementById('panel-season').style.display = tab === 'season' ? 'block' : 'none';
+  document.getElementById('tab-daily').classList.toggle('active',  tab === 'daily');
+  document.getElementById('tab-season').classList.toggle('active', tab === 'season');
+  if(tab === 'season' && !seasonDataLoaded) fetchMonthlyData();
+}
+
+// ── SEASON REPORT ─────────────────────────────────────────
+let seasonDataLoaded = false;
+let seasonData = null;
+
+function initMonthPicker(){
+  const mp = document.getElementById('monthPicker');
+  const saved = localStorage.getItem('gardenSeasonMonth');
+  // Default to current month
+  const now = new Date();
+  const defaultMonth = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  mp.value = saved || defaultMonth;
+}
+
+async function fetchMonthlyData(){
+  if(SHEET_API_URL === 'YOUR_APPS_SCRIPT_URL_HERE') return;
+  const mp = document.getElementById('monthPicker');
+  const month = mp ? mp.value : new Date().toISOString().substring(0,7);
+  if(!month) return;
+  localStorage.setItem('gardenSeasonMonth', month);
+
+  document.getElementById('seasonTeamTotals').innerHTML = '<div class="season-loading">🌱 Loading season data...</div>';
+  document.getElementById('seasonGardenerGrid').innerHTML = '';
+
+  try {
+    const url = SHEET_API_URL + '?mode=monthly&month=' + encodeURIComponent(month);
+    const res  = await fetch(url);
+    const data = await res.json();
+    if(!data.ok) throw new Error(data.error || 'API error');
+    seasonData = data;
+    seasonDataLoaded = true;
+    renderSeasonReport(data);
+  } catch(err) {
+    document.getElementById('seasonTeamTotals').innerHTML = '<div class="season-loading">⚠️ Could not load season data. Try syncing.</div>';
+    console.error('Monthly fetch error:', err);
+  }
+}
+
+function renderSeasonReport(data){
+  const members = data.members || [];
+  const monthLabel = data.monthName || data.month || 'This Month';
+  const daysLogged = data.daysLogged || 0;
+
+  // Update sub title
+  document.getElementById('seasonSub').textContent =
+    `${monthLabel} · ${daysLogged} day${daysLogged!==1?'s':''} logged · ${members.length} gardeners`;
+
+  // Team totals
+  const teamTotals = COL_META.reduce((obj, meta) => {
+    obj[meta.key] = members.reduce((s,m) => s + (m[meta.key]||0), 0);
+    return obj;
+  }, {});
+  const teamWeighted = COL_META.reduce((s,meta) => s + (teamTotals[meta.key] * meta.weight), 0);
+
+  // Meta chips
+  document.getElementById('seasonMeta').innerHTML = `
+    <div class="season-meta-chip">
+      <div class="smc-val">${teamWeighted.toFixed(1)}</div>
+      <div class="smc-label">Team Points</div>
+    </div>
+    <div class="season-meta-chip">
+      <div class="smc-val">${daysLogged}</div>
+      <div class="smc-label">Days Logged</div>
+    </div>
+    <div class="season-meta-chip">
+      <div class="smc-val">$${Math.round(data.revenue||0).toLocaleString()}</div>
+      <div class="smc-label">Revenue</div>
+    </div>`;
+
+  // Team totals strip
+  let totalsHtml = '<div class="season-team-totals-title">📊 Team Totals — ' + monthLabel + '</div><div class="season-totals-grid">';
+  COL_META.forEach(meta => {
+    const val = teamTotals[meta.key] || 0;
+    const pts = (val * meta.weight).toFixed(1);
+    totalsHtml += `
+      <div class="season-total-chip">
+        <span class="stc-icon">${meta.icon}</span>
+        <div class="stc-val">${val}</div>
+        <span class="stc-label">${meta.label}</span>
+        <div class="stc-pts">${pts} pts</div>
+      </div>`;
+  });
+  totalsHtml += '</div>';
+  document.getElementById('seasonTeamTotals').innerHTML = totalsHtml;
+
+  // Gardener cards — sorted by weighted score desc
+  const scored = members.map(m => ({
+    ...m,
+    weighted: COL_META.reduce((s,meta) => s + ((m[meta.key]||0) * meta.weight), 0)
+  })).sort((a,b) => b.weighted - a.weighted);
+
+  let cardsHtml = '';
+  scored.forEach((m, ri) => {
+    const origIdx = members.indexOf(members.find(x=>x.name===m.name));
+    const clr = PLOT_COLORS[ri % PLOT_COLORS.length];
+    const rankLabel = ri === 0 ? '👑 Top Cultivator' : ri === 1 ? '🥈 Second Plot' : ri === 2 ? '🥉 Third Plot' : `#${ri+1}`;
+
+    // Split metrics into two rows of 4
+    const metricChips = COL_META.map(meta => `
+      <div class="sgc-metric">
+        <span class="sgcm-icon">${meta.icon}</span>
+        <div class="sgcm-val">${m[meta.key]||0}</div>
+        <span class="sgcm-label">${meta.label.split(' ')[0]}</span>
+      </div>`).join('');
+
+    cardsHtml += `
+      <div class="season-gardener-card">
+        <div class="sgc-header">
+          <div class="sgc-avatar" style="background:${clr.bg};color:${clr.fg};">${initials(m.name)}</div>
+          <div>
+            <div class="sgc-name">${m.name}</div>
+            <div class="sgc-rank">${rankLabel}</div>
+          </div>
+          <div class="sgc-score-block">
+            <div class="sgc-score">${m.weighted.toFixed(1)}</div>
+            <div class="sgc-score-label">Weighted Pts</div>
+          </div>
+        </div>
+        <div class="sgc-metrics">${metricChips}</div>
+      </div>`;
+  });
+  document.getElementById('seasonGardenerGrid').innerHTML = cardsHtml;
+}
+
 document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)closeModal();}));
+
+// Init month picker
+initMonthPicker();
 
 showView('overview');
 renderAll();
-
-// Attempt to load live data from Sheet on page open
 fetchFromSheet();
 </script>
 </body>
