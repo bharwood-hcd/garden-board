@@ -865,11 +865,12 @@ function initials(n){ return n.split(' ').map(w=>w[0]).join('').toUpperCase().sl
 
 // ── TEAM LIFT SCORE (z-score composite) ───────────────────
 const LIFT_WORKFLOWS = ['apps','inbound','outbound','revived','payoffs','lps','csi'];
-const LIFT_HARD_MIN  = 3;   // minimum actions to qualify a workflow
-const LIFT_MIN_QUALS = 3;   // minimum qualifying workflows for a score
-const LIFT_SCALE_MID = 50;
-const LIFT_SCALE_SD  = 15;
-const LIFT_BREADTH_BONUS = 0.03; // +3% per qualifying workflow beyond the minimum
+const LIFT_HARD_MIN    = 3;    // minimum actions to qualify a workflow
+const LIFT_MIN_QUALS   = 3;    // minimum qualifying workflows to receive any score
+const LIFT_BREADTH_PIVOT = 4;  // pivot point: below = penalty, above = bonus
+const LIFT_SCALE_MID   = 50;
+const LIFT_SCALE_SD    = 15;
+const LIFT_BREADTH_STEP = 0.03; // 3% per workflow above or below the pivot
 
 function computeTeamStats(memberList){
   const stats = {};
@@ -900,9 +901,9 @@ function teamLiftScore(m, teamStats){
   if(qualifyingZ.length < LIFT_MIN_QUALS) return null;
   const compositeZ = qualifyingZ.reduce((s,z) => s+z, 0) / qualifyingZ.length;
   const baseScore = LIFT_SCALE_MID + (compositeZ * LIFT_SCALE_SD);
-  // Breadth bonus: +3% per qualifying workflow beyond the minimum of 3
-  const breadthBonus = 1 + ((qualifyingZ.length - LIFT_MIN_QUALS) * LIFT_BREADTH_BONUS);
-  return baseScore * breadthBonus;
+  // Breadth multiplier: pivot is 4 workflows. +3% per workflow above, -3% per workflow below.
+  const breadthMultiplier = 1 + ((qualifyingZ.length - LIFT_BREADTH_PIVOT) * LIFT_BREADTH_STEP);
+  return baseScore * breadthMultiplier;
 }
 
 function workflowZ(m, w, teamStats){
@@ -1062,18 +1063,26 @@ function showGardener(idx, fromColKey){
     .findIndex(x=>x===m) + 1;
   const rankedTotal = members.filter(x => teamLiftScore(x,ts) !== null).length;
 
-  // Count qualifying workflows for breadth bonus display
+  // Count qualifying workflows for breadth multiplier display
   const qualCount = LIFT_WORKFLOWS.filter(w => {
     const val = m[w] || 0;
     const { stdev, threshold } = ts[w];
     return val >= threshold && stdev > 0;
   }).length;
-  const breadthPct = qualCount > LIFT_MIN_QUALS
-    ? `+${((qualCount - LIFT_MIN_QUALS) * LIFT_BREADTH_BONUS * 100).toFixed(0)}% breadth bonus (${qualCount} workflows)`
-    : `${qualCount} qualifying workflow${qualCount !== 1 ? 's' : ''} — no breadth bonus yet`;
+  let breadthNote = '';
+  if(liftScore !== null){
+    const diff = qualCount - LIFT_BREADTH_PIVOT;
+    if(diff > 0){
+      breadthNote = `+${(diff * LIFT_BREADTH_STEP * 100).toFixed(0)}% breadth bonus (${qualCount} workflows)`;
+    } else if(diff < 0){
+      breadthNote = `-${(Math.abs(diff) * LIFT_BREADTH_STEP * 100).toFixed(0)}% breadth offset (${qualCount} of ${LIFT_BREADTH_PIVOT} expected)`;
+    } else {
+      breadthNote = `${qualCount} workflows — at breadth target`;
+    }
+  }
 
   document.getElementById('rankSummary').innerHTML = liftScore !== null
-    ? `<strong>${m.name}</strong> is ranked <strong>#${overallRank} of ${rankedTotal}</strong> scored gardeners today with a Team Lift Score of <strong>${liftScore.toFixed(1)}</strong>. <em style="font-size:12px;opacity:0.8;">${breadthPct}</em>` +
+    ? `<strong>${m.name}</strong> is ranked <strong>#${overallRank} of ${rankedTotal}</strong> scored gardeners today with a Team Lift Score of <strong>${liftScore.toFixed(1)}</strong>. <em style="font-size:12px;opacity:0.8;">${breadthNote}</em>` +
       (overallRank===1 ? ' 👑 Leading the garden today!' : '')
     : `<strong>${m.name}</strong> has fewer than ${LIFT_MIN_QUALS} qualifying workflows today — no Team Lift Score yet. Keep growing! 🌱`;
 
@@ -1275,7 +1284,7 @@ function renderSeasonReport(data){
     const rankLabel = ri === 0 ? '👑 Top Cultivator' : ri === 1 ? '🥈 Second Plot' : ri === 2 ? '🥉 Third Plot' : `#${ri+1}`;
     const scoreStr = m.liftScore !== null ? m.liftScore.toFixed(1) : '—';
 
-    // Breadth bonus note
+    // Breadth multiplier note
     const qualCount = LIFT_WORKFLOWS.filter(w => {
       const val = m[w] || 0;
       const { stdev, threshold } = ts[w];
@@ -1283,11 +1292,13 @@ function renderSeasonReport(data){
     }).length;
     let breadthNote = '';
     if(m.liftScore !== null){
-      if(qualCount > LIFT_MIN_QUALS){
-        const bonusPct = ((qualCount - LIFT_MIN_QUALS) * LIFT_BREADTH_BONUS * 100).toFixed(0);
-        breadthNote = `<div style="font-size:10px;color:var(--moss);font-style:italic;margin-top:3px;">🌿 +${bonusPct}% breadth bonus (${qualCount} workflows)</div>`;
+      const diff = qualCount - LIFT_BREADTH_PIVOT;
+      if(diff > 0){
+        breadthNote = `<div style="font-size:10px;color:var(--moss);font-style:italic;margin-top:3px;">🌿 +${(diff * LIFT_BREADTH_STEP * 100).toFixed(0)}% breadth bonus (${qualCount} workflows)</div>`;
+      } else if(diff < 0){
+        breadthNote = `<div style="font-size:10px;color:var(--terracotta);font-style:italic;margin-top:3px;">⚠️ -${(Math.abs(diff) * LIFT_BREADTH_STEP * 100).toFixed(0)}% breadth offset (${qualCount} of ${LIFT_BREADTH_PIVOT} expected)</div>`;
       } else {
-        breadthNote = `<div style="font-size:10px;color:var(--bark);font-style:italic;margin-top:3px;">${qualCount} workflows — no breadth bonus</div>`;
+        breadthNote = `<div style="font-size:10px;color:var(--bark);font-style:italic;margin-top:3px;">✦ ${qualCount} workflows — at breadth target</div>`;
       }
     }
 
