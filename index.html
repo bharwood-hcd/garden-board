@@ -862,11 +862,72 @@ let currentView = 'overview';
 let prevView = 'overview';
 
 function initials(n){ return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
-function score(m){ return COL_META.reduce((s,meta)=>s+((m[meta.key]||0)*meta.weight),0); }
-function scoreDisplay(m){ return score(m).toFixed(1); }
+
+// ── TEAM LIFT SCORE (z-score composite) ───────────────────
+const LIFT_WORKFLOWS = ['apps','inbound','outbound','revived','payoffs','lps','csi'];
+const LIFT_HARD_MIN  = 3;   // minimum actions to qualify a workflow
+const LIFT_MIN_QUALS = 3;   // minimum qualifying workflows for a score
+const LIFT_SCALE_MID = 50;
+const LIFT_SCALE_SD  = 15;
+
+function computeTeamStats(memberList){
+  const stats = {};
+  LIFT_WORKFLOWS.forEach(w => {
+    const vals = memberList.map(m => m[w] || 0);
+    const n    = vals.length;
+    const sorted = [...vals].sort((a,b) => a-b);
+    const mid  = Math.floor(n/2);
+    const median = n % 2 !== 0 ? sorted[mid] : (sorted[mid-1] + sorted[mid]) / 2;
+    const mean = vals.reduce((s,v) => s+v, 0) / n;
+    const variance = vals.reduce((s,v) => s + Math.pow(v-mean,2), 0) / n;
+    const stdev = Math.sqrt(variance);
+    const threshold = Math.max(median * 0.5, LIFT_HARD_MIN);
+    stats[w] = { median, mean, stdev, threshold };
+  });
+  return stats;
+}
+
+function teamLiftScore(m, teamStats){
+  const qualifyingZ = [];
+  LIFT_WORKFLOWS.forEach(w => {
+    const val = m[w] || 0;
+    const { mean, stdev, threshold } = teamStats[w];
+    if(val >= threshold && stdev > 0){
+      qualifyingZ.push((val - mean) / stdev);
+    }
+  });
+  if(qualifyingZ.length < LIFT_MIN_QUALS) return null;
+  const compositeZ = qualifyingZ.reduce((s,z) => s+z, 0) / qualifyingZ.length;
+  return LIFT_SCALE_MID + (compositeZ * LIFT_SCALE_SD);
+}
+
+function workflowZ(m, w, teamStats){
+  const val = m[w] || 0;
+  const { mean, stdev, threshold } = teamStats[w];
+  if(val < threshold || stdev === 0) return null;
+  return (val - mean) / stdev;
+}
+
+function getTeamStats(){ return computeTeamStats(members); }
+
+function scoreDisplay(m, teamStats){
+  const ts = teamStats || getTeamStats();
+  const s  = teamLiftScore(m, ts);
+  return s !== null ? s.toFixed(1) : '—';
+}
 
 function sorted(){ return [...members].sort((a,b)=>{ const la=a.name.split(' ').pop(), lb=b.name.split(' ').pop(); return la.localeCompare(lb); }); }
-function topMember(){ const s=sorted(); let best=s[0]; s.forEach(m=>{ if(score(m)>score(best)) best=m; }); return best; }
+function topMember(){
+  const ts = getTeamStats();
+  const s  = sorted();
+  let best = s[0];
+  let bestScore = teamLiftScore(s[0], ts) ?? -Infinity;
+  s.forEach(m => {
+    const sc = teamLiftScore(m, ts) ?? -Infinity;
+    if(sc > bestScore){ best = m; bestScore = sc; }
+  });
+  return best;
+}
 
 function showView(v, fromCat){
   ['overview','category','gardener'].forEach(id=>{
@@ -879,32 +940,31 @@ function showView(v, fromCat){
 /* ── OVERVIEW ── */
 function renderOverview(){
   const totals = COLS.map(c=>members.reduce((s,m)=>s+(m[c]||0),0));
+  const ts = getTeamStats();
 
   let cards = '';
   COL_META.forEach((meta,i)=>{
     const total = totals[i];
-    const weightedTotal = (members.reduce((s,m)=>s+((m[meta.key]||0)*meta.weight),0)).toFixed(1);
     cards += `
       <div class="harvest-card" onclick="showCategory('${meta.key}')">
         <span class="card-icon">${meta.icon}</span>
         <div class="card-total">${total}</div>
         <span class="card-label">${meta.label}</span>
-        <div style="font-size:10px;color:var(--bark);font-style:italic;margin-top:4px;">${weightedTotal} pts &nbsp;·&nbsp; ×${meta.weight} each</div>
         <div class="card-hint">Click to see breakdown ↓</div>
       </div>`;
   });
   document.getElementById('harvestCards').innerHTML = cards;
 
   const top = topMember();
-  const topScore = score(top);
+  const topScore = teamLiftScore(top, ts);
   const topClr = PLOT_COLORS[members.indexOf(top) % PLOT_COLORS.length];
-  document.getElementById('topStrip').innerHTML = topScore > 0
+  document.getElementById('topStrip').innerHTML = topScore !== null
     ? `<div class="plot-badge" style="background:${topClr.bg};color:${topClr.fg};width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'Playfair Display',serif;border:2px solid rgba(255,255,255,0.5);">${initials(top.name)}</div>
        <div>
          <div class="top-label">👑 Today's Top Cultivator</div>
          <div class="top-name">${top.name}</div>
        </div>
-       <div class="top-score" style="margin-left:auto;">${scoreDisplay(top)} weighted points</div>`
+       <div class="top-score" style="margin-left:auto;">${topScore.toFixed(1)} Team Lift Score</div>`
     : `<div class="top-label" style="font-style:italic;color:var(--bark);">Enter numbers to see today's top cultivator 🌱</div>`;
 }
 
@@ -949,7 +1009,8 @@ function showCategory(colKey){
 function showGardener(idx, fromColKey){
   const m = members[idx];
   const clr = PLOT_COLORS[idx % PLOT_COLORS.length];
-  const totalScore = score(m);
+  const ts = getTeamStats();
+  const liftScore = teamLiftScore(m, ts);
 
   if(fromColKey){
     document.getElementById('gardenerBackBtn').onclick = ()=>showCategory(fromColKey);
@@ -968,32 +1029,39 @@ function showGardener(idx, fromColKey){
     <div class="hero-avatar" style="background:${clr.bg};color:${clr.fg};">${initials(m.name)}</div>
     <div class="hero-info">
       <div class="hero-name">${m.name}</div>
-      <div class="hero-tagline">${totalScore > 0 ? 'Strongest in '+topColMeta.label+' '+topColMeta.icon : 'Ready to grow something great 🌱'}</div>
+      <div class="hero-tagline">${liftScore !== null ? 'Strongest in '+topColMeta.label+' '+topColMeta.icon : 'Ready to grow something great 🌱'}</div>
     </div>
     <div class="hero-total">
-      <div class="ht-num">${scoreDisplay(m)}</div>
-      <div class="ht-label">Weighted Points</div>
+      <div class="ht-num">${liftScore !== null ? liftScore.toFixed(1) : '—'}</div>
+      <div class="ht-label">Team Lift Score</div>
     </div>`;
 
   let tiles = '';
-  COL_META.forEach((meta,i)=>{
+  COL_META.forEach((meta)=>{
     const val = m[meta.key]||0;
-    const weighted = (val * meta.weight).toFixed(1);
+    const z   = workflowZ(m, meta.key, ts);
     const rankInCol = [...members].sort((a,b)=>(b[meta.key]||0)-(a[meta.key]||0)).findIndex(x=>x===m)+1;
+    const zLabel = z !== null ? `z = ${z >= 0 ? '+' : ''}${z.toFixed(2)}` : 'below threshold';
     tiles += `
       <div class="stat-tile">
         <span class="st-icon">${meta.icon}</span>
         <div class="st-val">${val}</div>
         <span class="st-label">${meta.label}</span>
-        <div class="st-goal-txt">${weighted} pts &nbsp;·&nbsp; ×${meta.weight} &nbsp;·&nbsp; #${rankInCol} on team</div>
+        <div class="st-goal-txt">${zLabel} &nbsp;·&nbsp; #${rankInCol} on team</div>
       </div>`;
   });
   document.getElementById('statGrid').innerHTML = tiles;
 
-  const overallRank = [...members].sort((a,b)=>score(b)-score(a)).findIndex(x=>x===m)+1;
-  document.getElementById('rankSummary').innerHTML =
-    `<strong>${m.name}</strong> is ranked <strong>#${overallRank} of ${members.length}</strong> overall today with <strong>${scoreDisplay(m)} weighted points</strong>.` +
-    (overallRank===1 && totalScore>0 ? ' 👑 Leading the garden today!' : overallRank===members.length && totalScore===0 ? ' Time to get growing! 🌱' : '');
+  const overallRank = [...members]
+    .filter(x => teamLiftScore(x, ts) !== null)
+    .sort((a,b) => teamLiftScore(b,ts) - teamLiftScore(a,ts))
+    .findIndex(x=>x===m) + 1;
+  const rankedTotal = members.filter(x => teamLiftScore(x,ts) !== null).length;
+
+  document.getElementById('rankSummary').innerHTML = liftScore !== null
+    ? `<strong>${m.name}</strong> is ranked <strong>#${overallRank} of ${rankedTotal}</strong> scored gardeners today with a Team Lift Score of <strong>${liftScore.toFixed(1)}</strong>.` +
+      (overallRank===1 ? ' 👑 Leading the garden today!' : '')
+    : `<strong>${m.name}</strong> has fewer than ${LIFT_MIN_QUALS} qualifying workflows today — no Team Lift Score yet. Keep growing! 🌱`;
 
   showView('gardener');
 }
@@ -1001,13 +1069,15 @@ function showGardener(idx, fromColKey){
 /* ── FULL TABLE ── */
 function renderTable(){
   const s = sorted();
-  const topScore = s.reduce((mx,m)=>Math.max(mx,score(m)),0);
+  const ts = getTeamStats();
+  const topScore = s.reduce((mx,m)=>{ const sc=teamLiftScore(m,ts); return sc!==null&&sc>mx?sc:mx; }, -Infinity);
   const totals = COLS.map(c=>members.reduce((sum,m)=>sum+(m[c]||0),0));
 
   let html = '';
   s.forEach((m,si)=>{
     const origIdx = members.indexOf(m);
-    const isTop = score(m)===topScore && topScore>0;
+    const sc = teamLiftScore(m, ts);
+    const isTop = sc !== null && sc === topScore && topScore > -Infinity;
     const clr = PLOT_COLORS[origIdx % PLOT_COLORS.length];
     html += `<tr class="${isTop?'top-performer':''}" style="animation-delay:${si*0.04}s">`;
     html += `<td><div class="name-cell">
@@ -1148,14 +1218,8 @@ function renderSeasonReport(data){
     obj[meta.key] = members.reduce((s,m) => s + (m[meta.key]||0), 0);
     return obj;
   }, {});
-  const teamWeighted = COL_META.reduce((s,meta) => s + (teamTotals[meta.key] * meta.weight), 0);
-
   // Meta chips
   document.getElementById('seasonMeta').innerHTML = `
-    <div class="season-meta-chip">
-      <div class="smc-val">${teamWeighted.toFixed(1)}</div>
-      <div class="smc-label">Team Points</div>
-    </div>
     <div class="season-meta-chip">
       <div class="smc-val">${daysLogged}</div>
       <div class="smc-label">Days Logged</div>
@@ -1169,37 +1233,45 @@ function renderSeasonReport(data){
   let totalsHtml = '<div class="season-team-totals-title">📊 Team Totals — ' + monthLabel + '</div><div class="season-totals-grid">';
   COL_META.forEach(meta => {
     const val = teamTotals[meta.key] || 0;
-    const pts = (val * meta.weight).toFixed(1);
     totalsHtml += `
       <div class="season-total-chip">
         <span class="stc-icon">${meta.icon}</span>
         <div class="stc-val">${val}</div>
         <span class="stc-label">${meta.label}</span>
-        <div class="stc-pts">${pts} pts</div>
       </div>`;
   });
   totalsHtml += '</div>';
   document.getElementById('seasonTeamTotals').innerHTML = totalsHtml;
 
-  // Gardener cards — sorted by weighted score desc
+  // Gardener cards — sorted by Team Lift Score desc
+  const ts = computeTeamStats(members);
   const scored = members.map(m => ({
     ...m,
-    weighted: COL_META.reduce((s,meta) => s + ((m[meta.key]||0) * meta.weight), 0)
-  })).sort((a,b) => b.weighted - a.weighted);
+    liftScore: teamLiftScore(m, ts)
+  })).sort((a,b) => {
+    if(a.liftScore === null && b.liftScore === null) return 0;
+    if(a.liftScore === null) return 1;
+    if(b.liftScore === null) return -1;
+    return b.liftScore - a.liftScore;
+  });
 
   let cardsHtml = '';
   scored.forEach((m, ri) => {
-    const origIdx = members.indexOf(members.find(x=>x.name===m.name));
     const clr = PLOT_COLORS[ri % PLOT_COLORS.length];
     const rankLabel = ri === 0 ? '👑 Top Cultivator' : ri === 1 ? '🥈 Second Plot' : ri === 2 ? '🥉 Third Plot' : `#${ri+1}`;
+    const scoreStr = m.liftScore !== null ? m.liftScore.toFixed(1) : '—';
 
-    // Split metrics into two rows of 4
-    const metricChips = COL_META.map(meta => `
+    const metricChips = COL_META.map(meta => {
+      const z = workflowZ(m, meta.key, ts);
+      const zStr = z !== null ? `${z >= 0 ? '+' : ''}${z.toFixed(2)}` : '—';
+      return `
       <div class="sgc-metric">
         <span class="sgcm-icon">${meta.icon}</span>
         <div class="sgcm-val">${m[meta.key]||0}</div>
         <span class="sgcm-label">${meta.label.split(' ')[0]}</span>
-      </div>`).join('');
+        <div style="font-size:9px;color:var(--bark);font-style:italic;">z ${zStr}</div>
+      </div>`;
+    }).join('');
 
     cardsHtml += `
       <div class="season-gardener-card">
@@ -1210,8 +1282,8 @@ function renderSeasonReport(data){
             <div class="sgc-rank">${rankLabel}</div>
           </div>
           <div class="sgc-score-block">
-            <div class="sgc-score">${m.weighted.toFixed(1)}</div>
-            <div class="sgc-score-label">Weighted Pts</div>
+            <div class="sgc-score">${scoreStr}</div>
+            <div class="sgc-score-label">Team Lift Score</div>
           </div>
         </div>
         <div class="sgc-metrics">${metricChips}</div>
