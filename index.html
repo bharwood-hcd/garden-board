@@ -1275,6 +1275,22 @@ function renderSeasonReport(data){
     const rankLabel = ri === 0 ? '👑 Top Cultivator' : ri === 1 ? '🥈 Second Plot' : ri === 2 ? '🥉 Third Plot' : `#${ri+1}`;
     const scoreStr = m.liftScore !== null ? m.liftScore.toFixed(1) : '—';
 
+    // Breadth bonus note
+    const qualCount = LIFT_WORKFLOWS.filter(w => {
+      const val = m[w] || 0;
+      const { stdev, threshold } = ts[w];
+      return val >= threshold && stdev > 0;
+    }).length;
+    let breadthNote = '';
+    if(m.liftScore !== null){
+      if(qualCount > LIFT_MIN_QUALS){
+        const bonusPct = ((qualCount - LIFT_MIN_QUALS) * LIFT_BREADTH_BONUS * 100).toFixed(0);
+        breadthNote = `<div style="font-size:10px;color:var(--moss);font-style:italic;margin-top:3px;">🌿 +${bonusPct}% breadth bonus (${qualCount} workflows)</div>`;
+      } else {
+        breadthNote = `<div style="font-size:10px;color:var(--bark);font-style:italic;margin-top:3px;">${qualCount} workflows — no breadth bonus</div>`;
+      }
+    }
+
     const metricChips = COL_META.map(meta => {
       const z = workflowZ(m, meta.key, ts);
       const zStr = z !== null ? `${z >= 0 ? '+' : ''}${z.toFixed(2)}` : '—';
@@ -1294,6 +1310,7 @@ function renderSeasonReport(data){
           <div>
             <div class="sgc-name">${m.name}</div>
             <div class="sgc-rank">${rankLabel}</div>
+            ${breadthNote}
           </div>
           <div class="sgc-score-block">
             <div class="sgc-score">${scoreStr}</div>
