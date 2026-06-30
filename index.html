@@ -869,6 +869,7 @@ const LIFT_HARD_MIN  = 3;   // minimum actions to qualify a workflow
 const LIFT_MIN_QUALS = 3;   // minimum qualifying workflows for a score
 const LIFT_SCALE_MID = 50;
 const LIFT_SCALE_SD  = 15;
+const LIFT_BREADTH_BONUS = 0.03; // +3% per qualifying workflow beyond the minimum
 
 function computeTeamStats(memberList){
   const stats = {};
@@ -898,7 +899,10 @@ function teamLiftScore(m, teamStats){
   });
   if(qualifyingZ.length < LIFT_MIN_QUALS) return null;
   const compositeZ = qualifyingZ.reduce((s,z) => s+z, 0) / qualifyingZ.length;
-  return LIFT_SCALE_MID + (compositeZ * LIFT_SCALE_SD);
+  const baseScore = LIFT_SCALE_MID + (compositeZ * LIFT_SCALE_SD);
+  // Breadth bonus: +3% per qualifying workflow beyond the minimum of 3
+  const breadthBonus = 1 + ((qualifyingZ.length - LIFT_MIN_QUALS) * LIFT_BREADTH_BONUS);
+  return baseScore * breadthBonus;
 }
 
 function workflowZ(m, w, teamStats){
@@ -1058,8 +1062,18 @@ function showGardener(idx, fromColKey){
     .findIndex(x=>x===m) + 1;
   const rankedTotal = members.filter(x => teamLiftScore(x,ts) !== null).length;
 
+  // Count qualifying workflows for breadth bonus display
+  const qualCount = LIFT_WORKFLOWS.filter(w => {
+    const val = m[w] || 0;
+    const { stdev, threshold } = ts[w];
+    return val >= threshold && stdev > 0;
+  }).length;
+  const breadthPct = qualCount > LIFT_MIN_QUALS
+    ? `+${((qualCount - LIFT_MIN_QUALS) * LIFT_BREADTH_BONUS * 100).toFixed(0)}% breadth bonus (${qualCount} workflows)`
+    : `${qualCount} qualifying workflow${qualCount !== 1 ? 's' : ''} — no breadth bonus yet`;
+
   document.getElementById('rankSummary').innerHTML = liftScore !== null
-    ? `<strong>${m.name}</strong> is ranked <strong>#${overallRank} of ${rankedTotal}</strong> scored gardeners today with a Team Lift Score of <strong>${liftScore.toFixed(1)}</strong>.` +
+    ? `<strong>${m.name}</strong> is ranked <strong>#${overallRank} of ${rankedTotal}</strong> scored gardeners today with a Team Lift Score of <strong>${liftScore.toFixed(1)}</strong>. <em style="font-size:12px;opacity:0.8;">${breadthPct}</em>` +
       (overallRank===1 ? ' 👑 Leading the garden today!' : '')
     : `<strong>${m.name}</strong> has fewer than ${LIFT_MIN_QUALS} qualifying workflows today — no Team Lift Score yet. Keep growing! 🌱`;
 
