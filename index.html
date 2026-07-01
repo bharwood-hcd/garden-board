@@ -475,6 +475,122 @@ td.editable:hover .cell-val { color: var(--moss); }
 
 .season-loading { text-align: center; font-style: italic; color: var(--bark); padding: 40px; font-size: 14px; }
 
+/* ── HEAD GARDENER'S NOTE ── */
+.hgn-wrap {
+  margin-bottom: 20px;
+  background: var(--paper);
+  border: 1.5px solid rgba(107,68,35,0.25);
+  border-radius: 4px;
+  padding: 18px 20px;
+  position: relative;
+  box-shadow: 2px 2px 0 rgba(107,68,35,0.10);
+}
+.hgn-wrap::before {
+  content: '📌';
+  position: absolute;
+  top: -10px; left: 18px;
+  font-size: 20px;
+  filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
+}
+.hgn-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--bark); margin-bottom: 12px;
+  padding-top: 4px;
+}
+.hgn-cards {
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+.hgn-card {
+  flex: 1; min-width: 220px;
+  background: #fff;
+  border: 1.5px dashed rgba(107,68,35,0.25);
+  border-radius: 3px; padding: 14px 16px;
+}
+.hgn-card-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.hgn-icon { font-size: 20px; }
+.hgn-workflow {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px; font-weight: 700; color: var(--ink);
+}
+.hgn-message {
+  font-style: italic; font-size: 12px;
+  color: var(--bark); margin-bottom: 10px;
+  line-height: 1.5;
+}
+.hgn-progress-wrap {
+  margin-top: 6px;
+}
+.hgn-progress-track {
+  height: 10px; background: var(--chalk);
+  border-radius: 5px; overflow: hidden;
+  border: 1px solid rgba(107,68,35,0.15);
+}
+.hgn-progress-fill {
+  height: 100%; border-radius: 5px;
+  background: linear-gradient(90deg, var(--moss), var(--leaf));
+  transition: width 0.5s ease;
+}
+.hgn-progress-fill.complete {
+  background: linear-gradient(90deg, var(--sunflower), #e8b400);
+}
+.hgn-segmented {
+  display: flex; flex-direction: row;
+  overflow: hidden; border-radius: 5px;
+}
+.hgn-segment {
+  height: 100%;
+  transition: width 0.5s ease;
+  opacity: 0.92;
+}
+.hgn-segment:first-child { border-radius: 5px 0 0 5px; }
+.hgn-segment:last-child  { border-radius: 0 5px 5px 0; }
+.hgn-segment:only-child  { border-radius: 5px; }
+.hgn-legend {
+  display: flex; flex-wrap: wrap; gap: 6px 12px;
+  margin-top: 7px; align-items: center;
+}
+.hgn-legend-dot {
+  display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; flex-shrink: 0;
+  vertical-align: middle; margin-right: 3px;
+}
+.hgn-legend-name {
+  font-size: 10px; color: var(--bark);
+  font-style: italic;
+}
+.hgn-progress-label {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--bark);
+  margin-top: 5px; font-style: italic;
+}
+.hgn-pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--moss);
+}
+.hgn-pct.complete { color: var(--sunflower); }
+
+/* Season Report version */
+.season-hgn-wrap {
+  background: #fff;
+  border: 1.5px solid rgba(107,68,35,0.15);
+  border-radius: 4px; padding: 18px 20px;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 0 rgba(107,68,35,0.08);
+  position: relative;
+}
+.season-hgn-wrap::before {
+  content: '📌';
+  position: absolute;
+  top: -10px; left: 18px;
+  font-size: 20px;
+}
+
 /* ── FOOTER ── */
 hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); margin: 24px 0 14px; }
 .footer { text-align: center; font-style: italic; font-size: 12px; color: var(--bark); opacity: 0.7; }
@@ -533,6 +649,9 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
     <!-- BONUS TRACKER STRIP -->
     <div class="bonus-strip" id="bonusStrip"></div>
 
+    <!-- HEAD GARDENER'S NOTE -->
+    <div id="hgnWrap" style="display:none;"></div>
+
     <!-- ═══ VIEW 1: OVERVIEW ═══ -->
     <div id="view-overview">
       <div class="overview-grid" id="harvestCards"></div>
@@ -582,6 +701,7 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
       <div class="season-team-totals" id="seasonTeamTotals">
         <div class="season-loading">🌱 Select a month to load the season report...</div>
       </div>
+      <div id="seasonHgnWrap"></div>
       <div class="season-gardener-grid" id="seasonGardenerGrid"></div>
     </div><!-- /panel-season -->
 
@@ -644,6 +764,94 @@ let BONUS_MONTH_START = new Date('2026-05-01');
 let BONUS_MONTH_END   = new Date('2026-05-31');
 
 let currentRevenue = 1632119.34;
+
+/* ── HEAD GARDENER'S NOTE CONFIG ── */
+// Fallback — overridden by goals tab in Google Sheet
+// Set harvest_workflow_1/2, harvest_goal_1/2, harvest_label_1/2 in the goals tab
+let HARVEST_PRIORITIES = [
+  // { workflow: 'apps', goal: 3000, label: 'Special order to fill — bean season is here!' },
+];
+
+function buildHgnSegmentedBar(priority, memberList){
+  const meta = COL_META.find(c => c.key === priority.workflow);
+  if(!meta) return '';
+  const teamTotal = memberList.reduce((s,m) => s + (m[meta.key]||0), 0);
+  const pct = Math.min(100, priority.goal > 0 ? (teamTotal / priority.goal * 100) : 0);
+  const complete = pct >= 100;
+
+  // Build segments — sorted by contribution descending so biggest slice is first
+  const contributors = memberList
+    .map((m, idx) => ({ name: m.name, val: m[meta.key]||0, color: PLOT_COLORS[idx % PLOT_COLORS.length].bg }))
+    .filter(c => c.val > 0)
+    .sort((a,b) => b.val - a.val);
+
+  // Each segment width = (person's val / goal) * 100%, capped so total bar doesn't exceed 100%
+  let usedPct = 0;
+  const segments = contributors.map(c => {
+    const segPct = Math.min(priority.goal > 0 ? (c.val / priority.goal * 100) : 0, 100 - usedPct);
+    usedPct += segPct;
+    return `<div class="hgn-segment" style="width:${segPct}%;background:${c.color};" title="${c.name}: ${c.val.toLocaleString()}"></div>`;
+  }).join('');
+
+  // Legend — top 4 contributors only to keep it readable
+  const legend = contributors.slice(0,4).map(c =>
+    `<span class="hgn-legend-dot" style="background:${c.color};"></span><span class="hgn-legend-name">${c.name.split(' ')[0]}: ${c.val.toLocaleString()}</span>`
+  ).join('');
+  const moreCount = contributors.length - 4;
+  const moreText = moreCount > 0 ? `<span style="font-size:10px;color:var(--bark);font-style:italic;">+${moreCount} more</span>` : '';
+
+  return `
+    <div class="hgn-card">
+      <div class="hgn-card-header">
+        <span class="hgn-icon">${meta.icon}</span>
+        <span class="hgn-workflow">${meta.label}</span>
+      </div>
+      <div class="hgn-message">"${priority.label}"</div>
+      <div class="hgn-progress-wrap">
+        <div class="hgn-progress-track hgn-segmented">${segments}</div>
+        <div class="hgn-progress-label">
+          <span>${teamTotal.toLocaleString()} of ${priority.goal.toLocaleString()}</span>
+          <span class="hgn-pct ${complete?'complete':''}">${pct.toFixed(1)}% ${complete ? '🌻 Complete!' : ''}</span>
+        </div>
+        <div class="hgn-legend">${legend}${moreText}</div>
+      </div>
+    </div>`;
+}
+
+function renderHgnCard(priority){
+  return buildHgnSegmentedBar(priority, members);
+}
+
+function renderHgn(){
+  const wrap = document.getElementById('hgnWrap');
+  if(!wrap) return;
+  if(!HARVEST_PRIORITIES || HARVEST_PRIORITIES.length === 0){
+    wrap.style.display = 'none';
+    return;
+  }
+  const cards = HARVEST_PRIORITIES.map(renderHgnCard).join('');
+  wrap.style.display = 'block';
+  wrap.innerHTML = `
+    <div class="hgn-wrap">
+      <div class="hgn-title">📜 Head Gardener's Note — Harvest Priority</div>
+      <div class="hgn-cards">${cards}</div>
+    </div>`;
+}
+
+function renderSeasonHgn(priorities, memberList){
+  const wrap = document.getElementById('seasonHgnWrap');
+  if(!wrap) return;
+  if(!priorities || priorities.length === 0){
+    wrap.innerHTML = '';
+    return;
+  }
+  const cards = priorities.map(p => buildHgnSegmentedBar(p, memberList)).join('');
+  wrap.innerHTML = `
+    <div class="season-hgn-wrap">
+      <div class="hgn-title">📜 Head Gardener's Note — Harvest Priority</div>
+      <div class="hgn-cards">${cards}</div>
+    </div>`;
+}
 
 function workingDaysLeft(){
   const today = new Date();
@@ -817,6 +1025,24 @@ async function fetchFromSheet(){
     if(data.monthName)  BONUS_MONTH_NAME  = data.monthName;
     if(data.monthStart && !data.monthStart.includes('GMT')) BONUS_MONTH_START = new Date(data.monthStart + 'T00:00:00');
     if(data.monthEnd   && !data.monthEnd.includes('GMT'))   BONUS_MONTH_END   = new Date(data.monthEnd   + 'T00:00:00');
+
+    // Update harvest priorities from sheet goals tab
+    if(data.bonusGoals){
+      const newPriorities = [];
+      for(let i = 1; i <= 2; i++){
+        const wf    = data.bonusGoals[`harvest_workflow_${i}`];
+        const goal  = data.bonusGoals[`harvest_goal_${i}`];
+        const label = data.bonusGoals[`harvest_label_${i}`];
+        if(wf && goal){
+          newPriorities.push({
+            workflow: wf.toString().trim().toLowerCase(),
+            goal: parseFloat(goal),
+            label: label ? label.toString() : 'This month\'s harvest priority'
+          });
+        }
+      }
+      if(newPriorities.length > 0) HARVEST_PRIORITIES = newPriorities;
+    }
 
     // Update revenue from sheet
     if(typeof data.revenue === 'number' && data.revenue > 0){
@@ -1123,6 +1349,7 @@ function renderTable(){
 
 function renderAll(){
   renderBonusStrip();
+  renderHgn();
   renderOverview();
   renderTable();
   if(currentView==='overview') showView('overview');
@@ -1332,6 +1559,24 @@ function renderSeasonReport(data){
       </div>`;
   });
   document.getElementById('seasonGardenerGrid').innerHTML = cardsHtml;
+
+  // Head Gardener's Note — pass priorities from sheet data if available
+  const seasonPriorities = (() => {
+    if(!data.bonusGoals) return HARVEST_PRIORITIES;
+    const p = [];
+    for(let i = 1; i <= 2; i++){
+      const wf    = data.bonusGoals[`harvest_workflow_${i}`];
+      const goal  = data.bonusGoals[`harvest_goal_${i}`];
+      const label = data.bonusGoals[`harvest_label_${i}`];
+      if(wf && goal) p.push({
+        workflow: wf.toString().trim().toLowerCase(),
+        goal: parseFloat(goal),
+        label: label ? label.toString() : 'This month\'s harvest priority'
+      });
+    }
+    return p.length > 0 ? p : HARVEST_PRIORITIES;
+  })();
+  renderSeasonHgn(seasonPriorities, members);
 }
 
 document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)closeModal();}));
