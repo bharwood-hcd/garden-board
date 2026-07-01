@@ -741,7 +741,7 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
 <div class="toast" id="toast"></div>
 
 <script>
-const COLS     = ['apps','inbound','outbound','revived','payoffs','lps','csi'];
+const COLS     = ['apps','inbound','outbound','revived','payoffs','lps','csi','fax'];
 const COL_META = [
   {key:'apps',     label:'Apps Submitted',    icon:'📋', color:'#4A6741', weight:0.5 },
   {key:'inbound',  label:'Inbound Calls',      icon:'📞', color:'#2F6B55', weight:0.5 },
@@ -750,6 +750,7 @@ const COL_META = [
   {key:'payoffs',  label:'Payoffs Completed',  icon:'✅', color:'#6B4423', weight:1.0 },
   {key:'lps',      label:'LPS ToDo Fulfilled', icon:'🗂️', color:'#7A4F2D', weight:0.5 },
   {key:'csi',      label:'CSI Verifications',  icon:'🔍', color:'#3A5A7A', weight:0.5 },
+  {key:'fax',      label:'Faxes',              icon:'📠', color:'#5A4A6B', weight:0.5 },
 ];
 
 /* ── BONUS CONFIG ── */
@@ -963,16 +964,16 @@ const PLOT_COLORS = [
 
 // Fallback members shown before Sheet data loads
 let members = [
-  {name:'Skylar A.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'JA B.',      apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'Steve C.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'Mason D.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'Brandon H.', apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'Joan K.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'Afra M.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'Joshua S.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'Molly S.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
-  {name:'David W.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0},
+  {name:'Skylar A.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'JA B.',      apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'Steve C.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'Mason D.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'Brandon H.', apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'Joan K.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'Afra M.',    apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'Joshua S.',  apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'Molly S.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
+  {name:'David W.',   apps:0,inbound:0,outbound:0,revived:0,payoffs:0,lps:0,csi:0,fax:0},
 ];
 
 let dataSource = 'fallback'; // 'fallback' | 'sheet'
@@ -1096,7 +1097,7 @@ let prevView = 'overview';
 function initials(n){ return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
 
 // ── TEAM LIFT SCORE (z-score composite) ───────────────────
-const LIFT_WORKFLOWS = ['apps','inbound','outbound','revived','payoffs','lps','csi'];
+const LIFT_WORKFLOWS = ['apps','inbound','outbound','revived','payoffs','lps','csi','fax'];
 const LIFT_HARD_MIN    = 3;    // minimum actions to qualify a workflow
 const LIFT_MIN_QUALS   = 3;    // minimum qualifying workflows to receive any score
 const LIFT_BREADTH_PIVOT = 4;  // pivot point: below = penalty, above = bonus
