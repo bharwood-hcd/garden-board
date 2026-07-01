@@ -624,8 +624,8 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
 
     <!-- NAV TABS -->
     <div class="nav-tabs">
-      <button class="nav-tab active" id="tab-daily" onclick="switchTab('daily')">🌱 Daily Garden</button>
-      <button class="nav-tab" id="tab-season" onclick="switchTab('season')">🌾 Season Report</button>
+      <button class="nav-tab" id="tab-daily" onclick="switchTab('daily')">🌱 Daily Garden</button>
+      <button class="nav-tab active" id="tab-season" onclick="switchTab('season')">🌾 Monthly Harvest</button>
     </div>
 
     <!-- DAILY PANEL -->
@@ -683,12 +683,12 @@ hr.footer-divider { border: none; border-top: 2px dashed rgba(74,103,65,0.25); m
 
     </div><!-- /panel-daily -->
 
-    <!-- ═══ SEASON REPORT PANEL ═══ -->
+    <!-- ═══ MONTHLY HARVEST PANEL ═══ -->
     <div id="panel-season" style="display:none;">
       <div class="season-header">
         <div class="season-title-block">
-          <div class="season-title">🌾 Season Report</div>
-          <div class="season-sub" id="seasonSub">Monthly team harvest — all gardeners, all plots</div>
+          <div class="season-title">🌾 Monthly Harvest</div>
+          <div class="season-sub" id="seasonSub">This month's yield — all gardeners, all plots</div>
         </div>
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
           <div class="season-month-picker">
@@ -1593,6 +1593,7 @@ initMonthPicker();
 showView('overview');
 renderAll();
 fetchFromSheet();
+switchTab('season');
 </script>
 </body>
 </html>
